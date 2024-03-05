@@ -1,0 +1,61 @@
+테스트 개발시
+- 기기에서 설정 - Apps - 앱 - Permissions - 허용
+
+운영시
+1. 패키지 설치
+- pubspec.yaml 파일
+dependencies:
+  flutter:
+    sdk: flutter
+  permission_handler: ^8.3.0
+
+2. mina.dart에 import
+ - import 'package:permission_handler/permission_handler.dart'; 추가
+
+안드로이드 폰 세팅
+1. android폴/gradle.properties
+- 확인하기
+android.useAndroidX=true
+android.enableJetifier=true
+
+2. android/app/build.gradle
+- compileSdkVersion 31
+
+3. android/app/src/main/AndroidManifest.xml
+- 추가
+<manifest 어쩌구>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+   <application 어쩌구>
+
+아이폰용 폰 세팅
+1. 터미널에서
+cd ios
+sudo arch -x86_64 gem install ffi
+sudo arch -x86_64 gem install cocoapods
+
+2. ios/Podfile
+- 변경
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'PERMISSION_CONTACTS=1',
+         #추가할거 더 있으면 이 자리에
+      ]
+    end
+  end
+end
+
+3. info.plist
+- 추가
+<key>NSContactsUsageDescription</key>
+<string>님 폰의 연락처 권한이 필요합니다 제발 주셈</string>
+
+
+** 권한 예시
+https://pub.dev/packages/permission_handler
+Ex) 'PERMISSION_CAMERA=1',   //카메라 권한
+
