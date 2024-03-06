@@ -1,5 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 //main
 void main() {
@@ -21,7 +22,7 @@ class MyApp extends StatefulWidget {
 //MyAppState
 class _MyAppState extends State<MyApp> {
   var total = 1;
-  var name = ['이름1', '이름2', '이름3'];
+  var name = [];  //dynamic: 모든타입 가능 or List<Contact>
   var like = [0, 0, 0];
 
   // 더하기 함수
@@ -34,7 +35,10 @@ class _MyAppState extends State<MyApp> {
   // 친구 추가 함수
   onAddFriend(var val) {
     setState(() {
-      name.add(val);
+      //연락처 추가
+      var newPerson = Contact();
+      newPerson.givenName = val.toString();
+      ContactsService.addContact(newPerson);
     });
   }
 
@@ -45,22 +49,20 @@ class _MyAppState extends State<MyApp> {
     var status = await Permission.contacts.status; //연락처권한 상태
     if (status.isGranted) {
       print('허락됨');
+      //연락처 가져오기
+      var contacts = await ContactsService.getContacts();
+      print(contacts[0].givenName); //이름
+      setState(() {
+        name = contacts;
+      });
+
     } else if (status.isDenied) {
       print('거절됨');
       Permission.contacts.request(); //사용권한주라!!
     }
-    // status.isRestricted: OS가 금지
-    // status.isPermanentlyDenied: 안드로이드는 앱에서 껴놓은경우
     if (status.isPermanentlyDenied) {
       openAppSettings(); //앱 설정기능 열기
     }
-  }
-
-  //위젯 로드시 한번 실행됨
-  @override
-  void initState() {
-    super.initState();
-    getPermission();
   }
 
   @override
@@ -76,7 +78,7 @@ class _MyAppState extends State<MyApp> {
           itemBuilder: (a, i){
             return ListTile(
               leading: Image.asset('assets/IMG_1256.JPG'),
-              title: Text(name[i]),
+              title: Text(name[i].givenName),
               contentPadding: EdgeInsets.all(5),
             );
           }),
@@ -122,7 +124,10 @@ class DialogUI extends StatelessWidget {
               onChanged: (text) { inputData2 = text;},
             ),
             //확인 버튼 누를시 전화번호부에 유저 추가됨
-            TextButton( child: Text('확인'), onPressed:(){ onAddFriend( inputData.text.toString() ); onAdd(); }),
+            TextButton( child: Text('확인'),
+                onPressed:(){
+                  onAddFriend( inputData.text.toString() ); onAdd(); Navigator.pop(context);
+            }),
             TextButton( child: Text('취소'), onPressed:(){ Navigator.pop(context); })
           ],
         ),

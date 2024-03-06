@@ -1,0 +1,22 @@
+1. pubspec.yaml
+- 추가
+dependencies:
+  flutter:
+    sdk: flutter
+  permission_handler: ^8.2.6
+  contacts_service: ^0.6.3
+
+  2. main.dart
+  - 추가
+  import 'package:contacts_service/contacts_service.dart';
+
+  3. 패키지 사용법
+  - 연락처 가져오기
+  var contacts = await ContactsService.getContacts();  //return list [연락처1, 연락처2....]
+  var contacts = await ContactsService.getContacts(withThumbnails: false); //썸네일 이미지 제외
+  print(contacts[0].givenName)
+
+  - 연락처 추가하기
+  var newContact = new Contact();
+  newContact.givenName = '민수';
+  await ContactsService.addContact(newContact); //addContact: 이름, failyName: 성
