@@ -1,0 +1,6 @@
+안드로이드
+- android/app/build.gradle 의 applicationId "com.example.contact_app"
+변경방법: View - Tool Windows - Terminal
+        => dart pub global activate rename
+        => rename setAppName --targets ios,android --value "com.회사명.앱이름"
+        ** 언더바는 X

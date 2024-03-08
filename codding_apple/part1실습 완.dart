@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
       print('허락됨');
       //연락처 가져오기
       var contacts = await ContactsService.getContacts();
-      print(contacts[0].givenName); //이름
+      print(contacts[0].givenName ?? "null"); //이름
       setState(() {
         name = contacts;
       });
@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> {
           itemBuilder: (a, i){
             return ListTile(
               leading: Image.asset('assets/IMG_1256.JPG'),
-              title: Text(name[i].givenName),
+              title: Text(name[i].givenName ?? "null"),
               contentPadding: EdgeInsets.all(5),
             );
           }),
@@ -127,7 +127,7 @@ class DialogUI extends StatelessWidget {
             TextButton( child: Text('확인'),
                 onPressed:(){
                   onAddFriend( inputData.text.toString() ); onAdd(); Navigator.pop(context);
-            }),
+                }),
             TextButton( child: Text('취소'), onPressed:(){ Navigator.pop(context); })
           ],
         ),
@@ -135,6 +135,3 @@ class DialogUI extends StatelessWidget {
     );
   }
 }
-
-
-
