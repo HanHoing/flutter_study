@@ -1,0 +1,35 @@
+01. New Flutter Project
+- 프로젝트 이름: 소문자, '_'제외
+
+02. main.dart
+- 추가
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(
+    MaterialApp(  // 밖으로 빼야 덜 불편함
+      home : MyApp()
+    )
+  );
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold();
+
+  }
+}
+
+
+03. analysis_options.yaml
+- rules 부분에 추가
+rules:
+  prefer_typing_uninitialized_variables: false
+  prefer_const_constructors_in_immutables: false
+  prefer_const_constructors: false
+  avoid_print: false
+  prefer_const_literals_to_create_immutables: false
+------------------------------------------------------------
